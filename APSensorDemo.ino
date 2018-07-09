@@ -14,7 +14,7 @@ Ticker blinker;
 // RTC Memory Address for the DoubleResetDetector to use
 #define DRD_ADDRESS 0
 
-#define AP_NAME "DontUseAccessPoint"
+#define AP_NAME "Smart  Sensor"
 
 #define DEFAULT_PASSWORD "nopassword"
 
@@ -22,7 +22,7 @@ Ticker blinker;
 WiFiServer server(80);
 
 // Auxiliar variables to store the current output state
-String outputState = "far";
+String outputState = "empty";
 // Variable to store the HTTP request
 String header;
 
@@ -123,11 +123,11 @@ void hostStatusWebpage()
            if (val == HIGH)
            {
             Serial.println("Output on");
-              outputState = "far";
+              outputState = "empty";
              
             } else {
               Serial.println("Output on");
-              outputState = "near";
+              outputState = "occupied";
             }
             
             // Display the HTML web page
@@ -142,11 +142,17 @@ void hostStatusWebpage()
             client.println(".button2 {background-color: #77878A;}</style></head>");
             
             // Web Page Heading
-            client.println("<body><h1>ESP8266 Web Server</h1>");
+            client.println("<body><h1>Smart Sensor</h1>");
             
             // Display current state, and ON/OFF buttons for the defined GPIO  
-            client.println("<p>Output - State " + outputState + "</p>");
-            // If the outputState is off, it displays the ON button       
+            client.println("<p> Lot 0001 : </p>");
+            // If the outputState is off, it displays the ON button  
+
+            if (outputState=="occupied") {
+              client.println("<p><a href=\"/5/on\"><button class=\"button\">occupied</button></a></p>");
+            } else {
+              client.println("<p><a href=\"/5/off\"><button class=\"button button2\">empty</button></a></p>");
+            } 
                       
             client.println("</body></html>");
             
@@ -170,4 +176,3 @@ void hostStatusWebpage()
     Serial.println("");
   }
 }
-
